@@ -3,8 +3,8 @@
 # key parameters!!
 H <- 3   # height difference, m
 L <- 400  # tunnel length, m
-Q <- 1  # heat generation rate, kW
-a <- 1 # size of duct, m
+Q <- 50  # heat generation rate, kW
+a <- 2 # size of duct, m
 b <- 2.4 # size of duct, m
 T.out <- 273+15  # outdoor temp, K
 xi <- 100 # total minor pressure loss coefficient
@@ -19,15 +19,15 @@ k <- 0.1 # roughness, m
 cp <- 1.005 # kJ/(kg K)
 #
 
-# calculated parameters
-T.in <- T.out + Q/(cp * u * rho * a * b)
-dT <- abs(T.in - T.out)   # temperature difference, K
-d.e <- 1.30 * (a * b)^0.625 / (a + b)^0.25  # effective diameter, m
-d.h <- 2 * a * b / (a + b)     # hydraulic diameter, m
-Re <- rho * u * d.h / mu # Reynolds number, turbulent: Re > 4000. Turbulent: TRUE
-#
-
 f <- function(u){
+        # calculated parameters
+        T.in <- T.out + Q/(cp * u * rho * a * b)
+        dT <- abs(T.in - T.out)   # temperature difference, K
+        d.e <- 1.30 * (a * b)^0.625 / (a + b)^0.25  # effective diameter, m
+        d.h <- 2 * a * b / (a + b)     # hydraulic diameter, m
+        Re <- rho * u * d.h / mu # Reynolds number, turbulent: Re > 4000. Turbulent: TRUE
+        #
+        
         # solve minor pressure loss coefficient, lambda
         f1 <- function(lambda){1 / lambda^0.5 + 2 * log(2.51 / (Re * lambda^0.5) + (k / d.h) / 3.72)}
         lambda <- uniroot(f1, c(0,10))$root
@@ -44,6 +44,8 @@ f <- function(u){
 }
 
 u <- uniroot(f, c(1e-5, 100))$root
+T.in <- T.out + Q/(cp * u * rho * a * b)
+dT <- abs(T.in - T.out)   # temperature difference, K
 Ps <- rho * g * H * abs(T.in - T.out) / T.in   # boyancy-driven pressure, Pa
 ACH <- u/L*3600 # air change rate per hour
 Q.air <- a * b * u * 3600  # air volume rate per hour, m3/h

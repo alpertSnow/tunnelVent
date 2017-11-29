@@ -5,7 +5,7 @@ rho <- 1.205 # density at 20C, kg/m3
 g <- 9.8
 H <- 5   # height difference, m
 L <- 200  # tunnel length, m
-Q <- 5  # heat generation rate, kW/s
+Q <- 139  # heat generation rate, kW/s
 U.out <- 10  # wind velocity, m/s
 a <- 2.7 # size of duct, m
 b <- 2.8 # size of duct, m
@@ -40,6 +40,6 @@ Pw <- 0.5 * rho * U.out  # dynamic pressure, Pa
 ACH <- u/L*3600 # air change rate per hour
 Q.air <- a * b * u * 3600  # air volume rate per hour, m3/h
 Ps - P.loss}
-# print(data.frame(dP, ACH, Q.air, P.loss, dT))
+print(data.frame(dP, ACH, Q.air, P.loss, dT))
 
 
